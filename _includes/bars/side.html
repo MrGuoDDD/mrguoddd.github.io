@@ -1,26 +1,38 @@
-{% if page.show_profile %}
-    <div class="card bg-light">
-        <div class="card-body text-center">
-            {{site.author.name}}
-            {% include components/profile-avatar.html %}
-            {% include components/profile-body.html %}
-        </div>
+<div class="card bg-light">
+    <div class="card-body text-center">
+        {{site.author.name}}
+        <ul class="navbar-nav ml-auto">
+
+            {% if page.title == "ArcMap使用示例" %}
+
+            {% for item in site.data.leftNavyDemos %}
+            <li class="nav-item">
+                <a href='#{{ item.href }}' class="nav-link">
+                    {{ item.title }}
+                </a>
+            </li>
+            {% endfor %}
+
+            {% endif %}
+
+
+
+            {% if page.title == "系统整理" %}
+
+            {% for item in site.data.leftNavySystemSort %}
+            <li class="nav-item">
+                <a href='#{{ item.href }}' class="nav-link">
+                    {{ item.title }}
+                </a>
+            </li>
+            {% endfor %}
+
+            {% endif %}
+
+
+
+        </ul>
     </div>
-{% endif %}
+</div>
 
-{% if page.show_tags %}
-    {% include components/all-tags.html %}
-{% endif %}
-
-{% if page.show_skills %}
-    {% include components/all-skills.html %}
-{% endif %}
-
-{% if page.path contains '_projects' %}
-    {% include components/project-meta.html %}
-{% endif %}
-
-{% if page.path contains '_posts' %}
-    {% include components/post-meta.html %}
-{% endif %}
 
