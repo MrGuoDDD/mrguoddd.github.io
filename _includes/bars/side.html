@@ -1,5 +1,5 @@
-<div class="card bg-light">
-    <div class="card-body text-center">
+<div>
+    <div class="card-body">
         {{site.author.name}}
         <ul class="navbar-nav ml-auto">
 
@@ -19,13 +19,44 @@
 
             {% if page.title == "系统整理" %}
 
-            {% for item in site.data.leftNavySystemSort %}
-            <li class="nav-item">
-                <a href='#{{ item.href }}' class="nav-link">
-                    {{ item.title }}
-                </a>
-            </li>
-            {% endfor %}
+
+            <a onclick="Analyse()" href="javascript:void(0)">决策分析 <i class="fa fa-caret-down"></i></a>
+            <div style="margin-left: 15px" id="AnalyseSub" class="w3-show ">
+                <a href="#crossSection" class="nav-link">横剖面分析</a>
+                <a href="#longiSection" class="nav-link">纵剖面分析</a>
+                <a href="#fireEmergency" class="nav-link">火灾抢险分析</a>
+                <a href="#pipeCrack" class="nav-link">爆管关阀分析</a>
+                <a href="#vertialDis" class="nav-link">垂直净距分析</a>
+                <a href="#horizonDis" class="nav-link">水平净距分析</a>
+                <a href="#DeepAnalyse" class="nav-link">覆土深度分析</a>
+                <a href="#pieplePlant" class="nav-link">管线规划设计</a>
+                <a href="#roadExpand" class="nav-link">道路扩建分析</a>
+                <a href="#boundaryBreak" class="nav-link">范围拆迁分析</a>
+                <a href="#pipleLine3d" class="nav-link">管线三维分析</a>
+                <a href="#dx3d" class="nav-link">地形三维分析</a>
+                <a href="#sptial3d" class="nav-link">空间三维分析</a>
+            </div>
+
+
+            <a onclick="DataStatic()" href="javascript:void(0)" >数据统计 <i class="fa fa-caret-down"></i></a>
+            <div style="margin-left: 15px" id="DataStaticSub" class="w3-show ">
+                <a href="#WholeDBPipelineLength" class="nav-link">全库管线长度统计</a>
+                <a href="#WholeDBPipePointCount" class="nav-link">全库管点数量统计</a>
+                <a href="#WholeDBPipeLineSortStatic" class="nav-link">全库管线分类统计</a>
+
+                <a href="#WholeDBPipePointSortStatic" class="nav-link">全库管点分类统计</a>
+                <a href="#WholeDBPipeMaterialsSortStatic" class="nav-link">按管线材质统计</a>
+                <a href="#WholeDBPipeDiameterSortStatic" class="nav-link">按管线管径统计</a>
+                <a href="#WholeDBPipeAgeSortStatic" class="nav-link">按建设年代统计</a>
+                <a href="#WholeDBPipeWorkSortStatic" class="nav-link">按权属单位统计</a>
+                <a href="#WholeDBPipeRoadrSortStatic" class="nav-link">按所在道路统计</a>
+
+                <a href="#WholeDBSimpleConditionStatic" class="nav-link">全库简单条件统计</a>
+                <a href="#WholeDBComplexConditionStatic" class="nav-link">全库复合条件统计</a>
+                <a href="#WholeDBRegionPipleLineStatic" class="nav-link">区域内管线长度统计</a>
+                <a href="#WholeDBRegionPiplePointcountStatic" class="nav-link">区域内管点数量统计</a>
+                <a href="#WholeDBRegionComplexConditionStatic" class="nav-link">区域内复合条件统计</a>
+            </div>
 
             {% endif %}
 
@@ -36,3 +67,23 @@
 </div>
 
 
+<script>
+
+    function Analyse() {
+        var x = document.getElementById("AnalyseSub");
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += "w3-show";
+        } else {
+            x.className = x.className.replace("w3-show", "");
+        }
+    }
+
+    function DataStatic() {
+        var x = document.getElementById("DataStaticSub");
+        if (x.className.indexOf("w3-show") == -1) {
+            x.className += "w3-show";
+        } else {
+            x.className = x.className.replace("w3-show", "");
+        }
+    }
+</script>
