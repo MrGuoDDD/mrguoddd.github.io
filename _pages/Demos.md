@@ -9,6 +9,8 @@ title: ArcMap使用示例
 
 ### 认证（Authorization）
 ```text
+//ESRI.ArcGIS.System
+//ESRI.ArcGIS.Version
 public static bool AuthorizationSetting()
 {
     RuntimeManager.Bind(ProductCode.EngineOrDesktop);
