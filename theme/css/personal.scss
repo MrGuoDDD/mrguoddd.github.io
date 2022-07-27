@@ -1,0 +1,58 @@
+---
+---
+
+img{
+  width: 40%;
+  margin: 10px;
+}
+
+blockquote {
+  background: #f9f9f9;
+  border-left: 10px solid #ccc;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "\201C" "\201D" "\2018" "\2019";
+}
+
+table,
+
+table th,
+
+table td {
+
+  border: 1px solid #555;
+
+}
+
+table{
+
+  table-layout: fixed;
+
+}
+
+td {
+
+  padding: 15px 10px;
+
+  width:150px;
+
+}
+
+tr {
+
+  height:30px;
+
+}
+
+table {
+  min-height: 30px;
+
+  line-height: 25px;
+
+  text-align: center;
+
+  border-collapse: collapse;
+
+  font-size: 13px;
+
+}
