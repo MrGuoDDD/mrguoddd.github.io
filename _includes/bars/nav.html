@@ -2,11 +2,10 @@
     <div class="container">
         <a class="navbar-brand font-weight-bold" href="#">{{site.name}}</a>
         <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav ml-auto">
+            <ul style="flex-direction: row;display: flex;list-style: none;margin-left: auto">
                 {% for item in site.data.nav %}
                 <li class="nav-item">
-                    <a href='{% if item.href contains ":" %}{% else %}{{ site.baseurl }}/{% endif %}{{ item.href }}'
-                       class="nav-link">
+                    <a href='{% if item.href contains ":" %}{% else %}{{ site.baseurl }}/{% endif %}{{ item.href }}'  class="nav-link">
                         {{ item.title }}
                     </a>
                 </li>
