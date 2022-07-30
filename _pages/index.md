@@ -4,7 +4,7 @@ permalink: index.html
 title: 系统整理
 ---
 
-### 一、决策分析算法
+### 一、决策分析
 
 <div id="crossSection"/>
 
