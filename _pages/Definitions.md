@@ -1,7 +1,7 @@
 ---
 layout: defaults/page
 permalink: definitions.html
-title: 名词解释
+title: 外业数据结构
 ---
 
 `1. `点表

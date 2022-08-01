@@ -1,8 +1,9 @@
 ---
 layout: defaults/page
 permalink: index.html
-title: 系统整理
+title: 系统功能整理
 ---
+
 
 ### 一、决策分析
 
@@ -30,6 +31,7 @@ title: 系统整理
 > 求解步骤：
 > + 找到与辅助线相交的管线以及交点
 > + 计算交点处的地面高程、中心高程、以及辅助线起点到交点的距离
+
 
 
 ![alt 属性文本](../theme/img/20.png)

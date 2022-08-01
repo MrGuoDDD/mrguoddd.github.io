@@ -1,7 +1,7 @@
 ---
 layout: defaults/page
 permalink: algorithm.html
-title: 算法整理
+title: 常用算法整理
 ---
 
 
