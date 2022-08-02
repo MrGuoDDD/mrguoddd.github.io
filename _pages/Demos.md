@@ -556,4 +556,31 @@ public void MapSearch(IFeatureLayer pLyr, IGeometry pGeometry, string whereClaus
 >+ IFeatureCursor Search(IQueryFilter filter, bool Recycling); //Returns an object cursor that can be used to fetch feature objects selected by the specified query.
 
 
+<div id="calculateInsetionPoint"/>
+
+### 求两个几何体的交点
+
+```text
+public static IPoint GetInsectionPoint(IGeometry geo1, IGeometry geo2)
+{
+    ITopologicalOperator pTopo = geo1 as ITopologicalOperator;
+    IGeometry pGeoInsection = pTopo.Intersect(geo2, esriGeometryDimension.esriGeometry0Dimension);
+    IPoint pPoint = (pGeoInsection as IPointCollection).get_Point(0);
+    return pPoint;
+}
+```
+
+>相关接口类型说明  
+>`1. `IPointCollection:  Provides access to members that manipulate the points of a Multipoint, Path,Ring, Polyline, Polygon, TriangleFan, TriangleStrip, or MultiPatch.  
+>`2. `esriGeometryDimension: The topological dimension of a geometry.
+
+>属性方法字段说明  
+>ITopologicalOperator
+>+ //Constructs the geometry that is the set-theoretic intersection of the input geometries.Use different resultDimension values to generate results of different dimensions.
+>+ IGeometry Intersect(IGeometry other, esriGeometryDimension resultDimension); 
+>
+>esriGeometryDimension
+>+ esriGeometryDimension.esriGeometry0Dimension //A zero dimensional geometry (such as a point or multipoint).
+
+
 
