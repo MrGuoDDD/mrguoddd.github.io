@@ -1,8 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
     <div class="container">
         <a class="navbar-brand font-weight-bold" href="#">{{site.name}}</a>
-        <div class="collapse navbar-collapse" id="navbarContent">
-            <ul style="flex-direction: row;display: flex;list-style: none;margin-left: auto">
+        <div>
+            <ul style="flex-direction: row;display: flex;list-style: none;margin-left: auto;margin-bottom: auto">
                 {% for item in site.data.nav %}
                 <li class="nav-item">
                     <a href='{% if item.href contains ":" %}{% else %}{{ site.baseurl }}/{% endif %}{{ item.href }}' target="_blank"  class="nav-link">

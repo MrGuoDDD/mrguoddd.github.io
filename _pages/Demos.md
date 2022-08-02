@@ -34,6 +34,8 @@ public static bool AuthorizationSetting()
 >注：在使用ArcMap任何接口之前需要使用以上方法进行注册
 
 
+<div id="connectGDB"/>
+
 ### 连接个人空间数据库（GDB）
 
 ```text
@@ -54,6 +56,8 @@ public static IWorkspace ConnectAccessDataBaseRun()
 >`1. `IWorkspaceFactory:Provides access to members that create and open workspaces and supply workspace factory information.  
 >`2. `AccessWorkspaceFactoryClass:Esri Access Workspace Factory.  
 >`3. `IWorkspace:Provides access to members that have information about the workspace.
+
+<div id="openFeature"/>
 
 ### 打开数据库某一要素数据
 
@@ -80,6 +84,7 @@ public static IFeatureClass OpenDBData(IWorkspace workSpace,string tableName,str
 >`2. `IFeatureWorkspace:Provides access to members that create and open various types of datasets and other workspace level objects.  
 >`3. `IWorkspace2:Provides access to members that have information about the workspace.
 
+<div id="displayFeatrue"/>
 
 ### 显示数据库二维要素数据到指定图层
 
@@ -141,6 +146,7 @@ public static void DisplayDBData(IFeatureClass pFeatureClass, IMap pMap)
 >IMap  
 >+ void AddLayer(ILayer Layer); //Adds a layer to the map.
 
+<div id="createTableField"/>
 
 ### 创建要素表以及表字段
 
@@ -219,6 +225,7 @@ public static IFeatureClass CreateDbTableData(IWorkspace workSpace)
 >ISpatialReference
 >+ void SetDomain(double XMin, double XMax, double YMin, double YMax); //The XY domain extent.
 
+<div id="insertFeatrueRecord"/>
 
 ### 向要素表里插入数据
 
@@ -253,7 +260,7 @@ public static void InsertDb(IFeatureClass pFC)
 >IFeature
 >+ void Store(); //Stores the row.
 
-
+<div id="updateFeatureFieldValue"/>
 
 ### 更新要素自定义属性值
 
@@ -309,6 +316,244 @@ public static void UpdateDbData(IFeatureClass pFeatureClass)
 >IFeatureCursor
 >+ IFeature NextFeature(); //Advance the position of the cursor by one and return the Feature object at that position.
 >+ void UpdateFeature(IFeature Object); //Update the existing Feature in the database corresponding to the current position of the cursor.
+
+<div id="drawTempLine"/>
+
+### 绘制临时辅助线
+```text
+
+static INewLineFeedback pNewLineFeedback = null;
+static INewPolygonFeedback pNewPolygonFeedback = null;
+static INewEnvelopeFeedback pNewEnvelopFeedback = null;
+
+/// <summary>
+/// FBMouseDown,FBMouseMove,FBEnd三个函数完成鼠标跟踪效果
+/// </summary>
+/// <param name="type">种类：0代表NewLineFeedback,1代笔NewPolygonFeedback,2代表NewEnvelopFeedback</param>
+/// <param name="mapCtrl"></param>
+/// <param name="point">当前鼠标位置坐标</param>
+public static void FBMouseDown(short type, MapControl mapCtrl, IPoint point)
+{
+    //this.MapCtrlMain.Object as MapControl
+    if (type > 2 || type < 0)
+        throw new Exception("类型错误!");
+    if (point == null)
+        throw new Exception("终止点不允许为空!");
+    if (mapCtrl == null)
+        throw new Exception("地图控件不允许为空!");
+    
+
+    if (type == 0)
+    {
+        if (pNewLineFeedback == null)
+        {
+            pNewLineFeedback = new NewLineFeedbackClass();
+            //给NewLineFeedback赋颜色
+            IRgbColor pRGB = new RgbColorClass();
+            pRGB.Red = 255; pRGB.Blue = 0; pRGB.Green = 0;
+            var pSlSymbol = pNewLineFeedback.Symbol as ISimpleLineSymbol;
+            if (pSlSymbol != null)
+            {
+                pSlSymbol.Color = pRGB;
+                pSlSymbol.Style = esriSimpleLineStyle.esriSLSSolid;
+            }
+            //pNewLineFeedback.Symbol.ROP2 = esriRasterOpCode.esriROPNotXOrPen;
+
+            pNewLineFeedback.Display = mapCtrl.ActiveView.ScreenDisplay;
+            pNewLineFeedback.Start(point);
+        }
+        else
+        {
+            pNewLineFeedback.AddPoint(point);
+
+        }
+    }
+    else if (type == 1)
+    {
+        if (pNewPolygonFeedback == null)
+        {
+            pNewPolygonFeedback = new NewPolygonFeedbackClass();
+            pNewPolygonFeedback.Display = mapCtrl.ActiveView.ScreenDisplay;
+            pNewPolygonFeedback.Start(point);
+        }
+        else
+        {
+            pNewPolygonFeedback.AddPoint(point);
+        }
+    }
+    else if (type == 2)
+    {
+        if (pNewEnvelopFeedback == null)
+        {
+            pNewEnvelopFeedback = new NewEnvelopeFeedbackClass();
+            pNewEnvelopFeedback.Display = mapCtrl.ActiveView.ScreenDisplay;
+            pNewEnvelopFeedback.Start(point);
+        }
+    }
+}
+
+/// <summary>
+/// FBMouseDown,FBMouseMove,FBEnd三个函数完成鼠标跟踪效果
+/// </summary>
+/// <param name="type">种类：0代表NewLineFeedback,1代笔NewPolygonFeedback,2代表NewEnvelopFeedback</param>
+/// <param name="point">当前鼠标位置世纪坐标</param>
+public static void FBMouseMove(short type, IPoint point)
+{
+    if (type > 2 || type < 0)
+        throw new Exception("类型错误!");
+    if (point == null)
+        throw new Exception("终止点不允许为空!");
+    if (type == 0)
+    {
+        if (pNewLineFeedback != null)
+            pNewLineFeedback.MoveTo(point);
+    }
+    else if (type == 1)
+    {
+        if (pNewPolygonFeedback != null)
+            pNewPolygonFeedback.MoveTo(point);
+    }
+    else if (type == 2)
+    {
+        if (pNewEnvelopFeedback != null)
+            pNewEnvelopFeedback.MoveTo(point);
+    }
+}
+
+/// <summary>
+/// FBMouseDown,FBMouseMove,FBEnd三个函数完成鼠标跟踪效果
+/// </summary>
+/// <param name="type">种类：0代表NewLineFeedback,1代笔NewPolygonFeedback,2代表NewEnvelopFeedback</param>
+/// <param name="point">当前鼠标位置世纪坐标</param>
+/// <returns>IGeometry对象</returns>
+public static IGeometry FBEnd(short type, IPoint point)
+{
+    if (type > 2 || type < 0)
+        throw new Exception("类型错误!");
+    if (point == null)
+        throw new Exception("终止点不允许为空!");
+    IGeometry pGeo = default(IGeometry);
+    if (type == 0)
+    {
+        if (pNewLineFeedback != null)
+        {
+            pNewLineFeedback.AddPoint(point);
+            pGeo = pNewLineFeedback.Stop();
+            pNewLineFeedback = default(INewLineFeedback);
+        }
+    }
+    else if (type == 1)
+    {
+        if (pNewPolygonFeedback != null)
+        {
+            pGeo = pNewPolygonFeedback.Stop();
+            pNewPolygonFeedback = default(INewPolygonFeedback);
+        }
+    }
+    else if (type == 2)
+    {
+        if (pNewEnvelopFeedback != null)
+        {
+            pGeo = pNewEnvelopFeedback.Stop();
+            pNewEnvelopFeedback = default(INewEnvelopeFeedback);
+        }
+    }
+    return pGeo;
+}
+
+```
+>引用的ArcMap程序集
+>+ ESRI.ArcGIS.Controls
+>+ ESRI.ArcGIS.Display
+
+>相关接口类型说明  
+>`1. `INewLineFeedback: Provides access to members that control the new line display feedback.  
+>`2. `INewPolygonFeedback: Provides access to members that control the new polygon display feedback.  
+>`3. `INewEnvelopeFeedback: Provides access to members that control the creation of a new envelope.  
+>`4. `IRgbColor: Provides access to members that control the RGB color values.
+>`5. `ISimpleLineSymbol: Provides access to members that control the simple line symbol.
+>`6. `IGeometry: Provides access to members that describe properties and behavior of all geometric objects.
+>`7. `IPoint: Provides access to members that define two dimensional points.
+>`8. `IActiveView: Provides access to members that control the active view - the main application window.
+
+
+>属性方法字段说明  
+>INewLineFeedback
+>+ ISymbol Symbol { get; set; } //The symbol the feedback object will use.
+>+ IScreenDisplay Display { set; } //The display the feedback object will use.
+>+ void Start(IPoint Point); //Begins a normal feedback at the given point.
+>+ void AddPoint(IPoint Point); //Creates a node at the given point.
+>+ void MoveTo(IPoint Point); //Move to the new point.
+>+ IPolyline Stop(); //Stops the feedback and returns the shape.
+>
+>ISimpleLineSymbol
+>+ IIColor Color { get; set; } //Line symbol color.
+>+ esriSimpleLineStyle Style { get; set; } //The style of the line symbol.
+>
+>MapControl
+>+ IActiveView ActiveView { get; } //The active view of the Map contained by the MapControl.
+>
+>IActiveView
+>+ IScreenDisplay ScreenDisplay { get; } //The screen display used by the view.
+
+<div id="searchElement"/>
+
+### 查询图层满足条件的要素
+
+```text
+public void MapSearch(IFeatureLayer pLyr, IGeometry pGeometry, string whereClause)
+{
+    var pTopologicalOperator = pGeometry as ITopologicalOperator;
+    if (pTopologicalOperator != null) pTopologicalOperator.Simplify();
+
+    IQueryFilter pQuerFilter = null;
+    ISpatialFilter pSFilter = new SpatialFilterClass();
+
+    pSFilter.Geometry = pGeometry;
+    if (!string.IsNullOrEmpty(whereClause))
+    {
+        pSFilter.WhereClause = whereClause;
+    }
+
+    pSFilter.SpatialRel =esriSpatialRelEnum.esriSpatialRelCrosses;
+    pSFilter.GeometryField = pLyr.FeatureClass.ShapeFieldName;
+    pQuerFilter = pSFilter;
+
+    IFeatureCursor pFCursor = pLyr.FeatureClass.Search(pQuerFilter, false);
+    IFeature pfeature = pFCursor.NextFeature();
+    while (pfeature != null)
+    {
+        pfeature = pFCursor.NextFeature();
+    }
+}
+```
+
+>相关接口类型说明  
+>`1. `ITopologicalOperator: Provides access to members for constructing new geometries based upon topological relationships between existing geometries.  
+>`2. `IQueryFilter: Provides access to members that filter data based on attribute values and or relationships.  
+>`3. `ISpatialFilter: Provides access to members that return and modify the type of spatial relationship that the filter will use.  
+>`4. `IFeatureLayer: Provides access to members that control common aspects of a feature layer.
+
+
+>属性方法字段说明  
+>ITopologicalOperator
+>+ void Simplify(); //Makes this geometry topologically correct.
+>
+>IFeatureLayer
+>+ IFeatureClass FeatureClass { get; set; } //The layer's feature class.
+> 
+> esriSpatialRelEnum
+> + esriSpatialRelEnum.esriSpatialRelCrosses //Query Geometry Crosses Target Geometry.
+> 
+>ISpatialFilter
+>+ IGeometry Geometry { get; set; } //The query geometry used to filter results.
+>+ string WhereClause { get; set; } //The where clause for the filter.
+>+ esriSpatialRelEnum SpatialRel { get; set; } //The spatial relationship checked by the filter.
+>+ string GeometryField { get; set; } //The name of the Geometry field to which the filter applies.
+>
+>IFeatureClass
+>+ string ShapeFieldName { get; } //The name of the default sShape field.
+>+ IFeatureCursor Search(IQueryFilter filter, bool Recycling); //Returns an object cursor that can be used to fetch feature objects selected by the specified query.
 
 
 

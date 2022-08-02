@@ -1,6 +1,30 @@
 - title: 认证（Authorization）
   href: Authorization
 
+- title: 连接数据库（GDB）
+  href: connectGDB
+
+- title: 打开要素数据
+  href: openFeature
+
+- title: 显示二维要素
+  href: displayFeatrue
+
+- title: 创建表字段
+  href: createTableField
+
+- title: 插入数据
+  href: insertFeatrueRecord
+
+- title: 更新要素
+  href: updateFeatureFieldValue
+
+- title: 绘制辅助线
+  href: drawTempLine
+
+- title: 要素查询
+  href: searchElement
+
 
 
 
