@@ -461,6 +461,21 @@ public static IGeometry FBEnd(short type, IPoint point)
     return pGeo;
 }
 
+
+public static void DrawRubberBands(MapControl mapCtrl)
+{
+    //Rubber-bands a circle on the MapControl.
+    mapCtrl.TrackCircle();
+    //Rubber-bands a polyline on the MapControl.
+    mapCtrl.TrackLine();
+    //Rubber-bands a polygon on the MapControl.
+    mapCtrl.TrackPolygon();
+    //Rubber-bands a rectangle on the MapControl.
+    mapCtrl.TrackRectangle();
+}
+
+
+
 ```
 >引用的ArcMap程序集
 >+ ESRI.ArcGIS.Controls
@@ -581,6 +596,87 @@ public static IPoint GetInsectionPoint(IGeometry geo1, IGeometry geo2)
 >
 >esriGeometryDimension
 >+ esriGeometryDimension.esriGeometry0Dimension //A zero dimensional geometry (such as a point or multipoint).
+>
+
+<div id="selection"/>
+
+### 选择集相关操作
+
+```text
+public static void MapControlSelection(MapControl mapCtrl)
+{
+    IEnvelope pEnv = mapCtrl.TrackRectangle();
+    IGeometry pGeo = pEnv as IGeometry;
+
+    //进行选择
+    mapCtrl.Map.SelectByShape(pGeo, null, false);
+
+    int nSlection = mapCtrl.Map.SelectionCount;
+    
+    ISelection selection = mapCtrl.Map.FeatureSelection;
+    IEnumFeature enumFeature = (IEnumFeature)selection;
+    enumFeature.Reset();
+
+    //读取选择的内容
+    IFeature pFeature = enumFeature.Next();
+    while (pFeature != null)
+    {
+        pFeature = enumFeature.Next();
+    }
+
+    //清除选择
+    mapCtrl.Map.ClearSelection();
+}
+```
+
+>相关接口类型说明  
+>`1. `IEnvelope:  Provides access to methods and properties of envelopes.  
+>`2. `ISelection: Provides access to members that control a collection of selectable objects.  
+>`3. `IEnumFeature: Provides access to members that hand out enumerated features and reset the enumeration.
+
+<div id="drawTempGraph"/>
+
+### 画临时图元
+
+```text
+public static IElement DrawLineElement(IPolyline pPolyline, int lngClr, esriSimpleLineStyle style, double width)
+{
+    #region 画线
+    IPoint startPoint = new PointClass();
+    IPoint endPoint = new PointClass();
+
+    startPoint.PutCoords(0, 0);
+    endPoint.PutCoords(100, 100);
+
+    object o = Type.Missing;
+    IPointCollection pointCollection = new PolylineClass();
+    pointCollection.AddPoint(startPoint, ref o, ref o);
+    pointCollection.AddPoint(endPoint, ref o, ref o);
+    IPolyline line = pointCollection as IPolyline;
+    #endregion
 
 
+    ILineElement pLineElement = new LineElementClass();
+    var pElement = pLineElement as IElement;
+    pElement.Geometry = pPolyline;
 
+    IRgbColor pRgbColor = new RgbColorClass();
+    pRgbColor.RGB = lngClr;
+
+    ISimpleLineSymbol pLineSymbol = new SimpleLineSymbolClass();
+    pLineSymbol.Color = pRgbColor;
+    pLineSymbol.Style = style;
+    pLineSymbol.Width = width;
+
+    pLineElement.Symbol = pLineSymbol;
+
+    return pLineElement as IElement;
+}
+```
+
+>相关接口类型说明  
+>`1. `IPolyline:  Provides access to members that identify and add behavior to a polyline object.  
+>`2. `ILineElement: Provides access to members that control the Line element.  
+>`3. `IRgbColor: Provides access to members that control the RGB color values.  
+>`4. `ISimpleLineSymbol: Provides access to members that control the simple line symbol.  
+>`5. `IElement: Provides access to members that control the Element.

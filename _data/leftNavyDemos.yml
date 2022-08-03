@@ -28,6 +28,10 @@
 - title: 求交点
   href: calculateInsetionPoint
 
+- title: 选择集
+  href: selection
 
+- title: 画临时图元
+  href: drawTempGraph
 
 
